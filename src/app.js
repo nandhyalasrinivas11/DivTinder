@@ -6,11 +6,19 @@ const app=express();
 app.use("/test",(req,res)=>{
    res.send("testing from the server");
 })
-app.use("/home",(req,res)=>{
-   res.send("showing home page");
+
+app.get("/user",(req,res)=>{
+  res.send(
+   {"firstname":"srinivas","age":19}
+);
 })
-app.use((req,res)=>{
-   res.send("hi srinivas");
+
+app.post("/user",(req,res)=>{
+   res.send("posted succesfully")
+})
+
+app.delete("/user",(req,res)=>{
+   res.send("delete sucessfully")
 })
 app.listen(5555,()=>{
     console.log("server running at the port 5555....")
