@@ -9,21 +9,14 @@ app.use(express.json())
 
 app.post("/signup",async (req,res)=>{
     
-    console.log(req.body);
+   
     //! creating a API 
-//     const userdata={
-    
-//     firstName:"srinu",
-//     lastName:"Nandhyala",
-//     gender:"male",
-//     age:19,
-//     email:"nandyalasrinivas11@gmail.com"
-// }
+    const userdata=req.body;
   
 
-// const user=new User(userdata)
-// await user.save();
-// res.send("Data posted")
+const user=new User(userdata)
+await user.save();
+res.send("Data posted")
 
 })
 
