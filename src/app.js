@@ -11,8 +11,13 @@ app.get("/signup", async (req, res) => {
 
     try {
         const user = await User.find({ firstName: firstName });
-
-        res.send(user);
+        if(user.length === 0){
+            res.status(404).send("data not Found");
+        }
+        else{
+            res.send(user);
+        }
+        
     } catch (err) {
         res.status(400).send("Something went wrong");
     }
