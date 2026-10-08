@@ -1,25 +1,43 @@
-const express= require("express");
+const express = require("express");
+const { connectDB } = require("./config/database");
 
-const app=express();
+const app = express();
+const User= require("./models/user");
 
 
-app.use("/test",(req,res)=>{
-   res.send("testing from the server");
+app.use(express.json())
+
+app.post("/signup",async (req,res)=>{
+    
+    console.log(req.body);
+    //! creating a API 
+//     const userdata={
+    
+//     firstName:"srinu",
+//     lastName:"Nandhyala",
+//     gender:"male",
+//     age:19,
+//     email:"nandyalasrinivas11@gmail.com"
+// }
+  
+
+// const user=new User(userdata)
+// await user.save();
+// res.send("Data posted")
+
 })
 
-app.get("/user",(req,res)=>{
-  res.send(
-   {"firstname":"srinivas","age":19}
-);
-})
 
-app.post("/user",(req,res)=>{
-   res.send("posted succesfully")
-})
+const startServer = async () => {
+    try {
+        await connectDB();
 
-app.delete("/user",(req,res)=>{
-   res.send("delete sucessfully")
-})
-app.listen(5555,()=>{
-    console.log("server running at the port 5555....")
-})
+        app.listen(5555, () => {
+            console.log("server running at the port 5555....");
+        });
+    } catch (err) {
+        console.log("Server not started because MongoDB connection failed");
+    }
+};
+
+startServer();
