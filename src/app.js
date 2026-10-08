@@ -23,6 +23,7 @@ app.get("/signup", async (req, res) => {
     }
 });
 
+
 app.get("/feed", async (req, res) => {
     const firstName = req.body.firstName;
 
@@ -34,6 +35,18 @@ app.get("/feed", async (req, res) => {
         res.status(400).send("Something went wrong");
     }
 });
+
+app.delete("/delete",async (req,res)=>{
+      const age=req.body.age;
+      try{
+        const user=await User.findOneAndDelete(age);
+        res.send("user deleted successfully")
+      }
+      catch(err){
+           res.status(404).send("user not found");
+      }
+})
+
 
 const startServer = async () => {
     try {
