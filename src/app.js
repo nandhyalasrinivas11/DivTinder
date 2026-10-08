@@ -6,6 +6,27 @@ const app = express();
 
 app.use(express.json());
 
+//! creating a API 
+//! adding the data to Database
+app.post("/userData",async (req,res)=>{
+    const userdata={  
+    firstName:"MS",
+    lastName:"Dhoni",
+    gender:"male",
+    age:44,
+    email:"Dhoni@gmail.com"
+}
+const user=new User(userdata)
+try{
+  await user.save();
+   res.send("Data posted")
+}
+catch(err){
+    re.status(404).send("Data not posted")
+}
+})
+
+//! fetching the data using name
 app.get("/signup", async (req, res) => {
     const firstName = req.body.firstName;
 
@@ -23,7 +44,7 @@ app.get("/signup", async (req, res) => {
     }
 });
 
-
+//! fetching the overallData 
 app.get("/feed", async (req, res) => {
     const firstName = req.body.firstName;
 
@@ -36,10 +57,11 @@ app.get("/feed", async (req, res) => {
     }
 });
 
+//! Deletion 
 app.delete("/delete",async (req,res)=>{
-      const age=req.body.age;
+      const firstName=req.body.firstName;
       try{
-        const user=await User.findOneAndDelete(age);
+        const user=await User.findOneAndDelete(firstName);
         res.send("user deleted successfully")
       }
       catch(err){
@@ -47,7 +69,21 @@ app.delete("/delete",async (req,res)=>{
       }
 })
 
+//! updating the data
+app.patch("/update",async (req,res)=>{
+    const firstName=req.body.firstName;
+    const data=req.body;
+    try{
+        await User.findOneAndUpdate({firstName:firstName},data)
+        res.send("Data updated successfully");
+    }
+    catch(err){
+        res.status(404).send("Data Not updated")
 
+    }
+})
+
+//! server
 const startServer = async () => {
     try {
         await connectDB();
