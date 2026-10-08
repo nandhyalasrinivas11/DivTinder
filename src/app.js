@@ -7,10 +7,22 @@ const app = express();
 app.use(express.json());
 
 app.get("/signup", async (req, res) => {
-    const age = req.body.age;
+    const firstName = req.body.firstName;
 
     try {
-        const user = await User.find({ age: age });
+        const user = await User.find({ firstName: firstName });
+
+        res.send(user);
+    } catch (err) {
+        res.status(400).send("Something went wrong");
+    }
+});
+
+app.get("/feed", async (req, res) => {
+    const firstName = req.body.firstName;
+
+    try {
+        const user = await User.find({});
 
         res.send(user);
     } catch (err) {
