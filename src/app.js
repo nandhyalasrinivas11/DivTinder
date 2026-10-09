@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 //! creating a API 
-//! adding the data to Database
+//! static data adding (API)
 app.post("/userData",async (req,res)=>{
     const userdata={  
     firstName:"MS",
@@ -26,7 +26,21 @@ catch(err){
 }
 })
 
-//! fetching the data using name
+//! Dynamic data adding (API)
+app.post("/Dynamicsignup",async (req,res)=>{  
+    //! creating a API 
+    try{
+const userdata=req.body;
+const user=new User(userdata)
+await user.save();
+res.send("Data posted")
+}
+  catch(err){
+     res.status(400).send("Fill the Details of the user");
+  }
+})
+
+//! fetching the data using name (API)
 app.get("/signup", async (req, res) => {
     const firstName = req.body.firstName;
 
@@ -44,7 +58,7 @@ app.get("/signup", async (req, res) => {
     }
 });
 
-//! fetching the overallData 
+//! fetching the overallData (API)
 app.get("/feed", async (req, res) => {
     const firstName = req.body.firstName;
 
@@ -57,7 +71,7 @@ app.get("/feed", async (req, res) => {
     }
 });
 
-//! Deletion 
+//! Deletion (API)
 app.delete("/delete",async (req,res)=>{
       const firstName=req.body.firstName;
       try{
@@ -69,10 +83,11 @@ app.delete("/delete",async (req,res)=>{
       }
 })
 
-//! updating the data
+//! updating the data (API)
 app.patch("/update",async (req,res)=>{
     const firstName=req.body.firstName;
     const data=req.body;
+    console.log(data);
     try{
         await User.findOneAndUpdate({firstName:firstName},data)
         res.send("Data updated successfully");
