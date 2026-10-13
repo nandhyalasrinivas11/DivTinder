@@ -27,6 +27,26 @@ catch(err){
 }
 })
 
+
+//! Login API(Authentication)
+app.post("/login",async (req,res)=>{
+   const {email,password}=req.body;
+   try{
+    const user=await User.findOne({email:email})
+    if(!user){
+        throw new Error("user not in Database");
+    }
+   const isPassword=await bcrypt.compare(password,user.password)
+   if(isPassword){
+    res.send("user login successfuly");
+   }
+   else res.send("inValid password")
+   }
+   catch(err){
+      res.send("ERROR"+err)
+   }
+})
+
 //! Dynamic data adding (API)
 //! creating a API 
 app.post("/Dynamicsignup",async (req,res)=>{  
