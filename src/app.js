@@ -3,6 +3,7 @@ const app = express();
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
 const {validSignupData}=require("./utils/validator");
+const bcrypt=require("bcrypt")
 
 app.use(express.json());
 
@@ -45,9 +46,13 @@ res.send("Data posted")
 // ! encrytingPassword and  validate the data Before storing into the database
 app.post("/usingValidatorsignup",async (req,res)=>{  
     //*  validate the data
-    
+
     try{
         validSignupData(req);
+         //* Encrypting the password
+         const  password=req.body.password
+         const passwordhash=await bcrypt.hash(password,10);
+         console.log(passwordhash)
         const userdata=req.body;
         const user=new User(userdata)
         await user.save();

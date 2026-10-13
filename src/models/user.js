@@ -20,6 +20,9 @@ const userSchema= mongoose.Schema({
     age:{
        type:Number
     },
+    password:{
+        type:String
+    },
     gender:{
         type:String,
         validate(value){
