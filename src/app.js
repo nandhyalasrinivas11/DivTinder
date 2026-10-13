@@ -44,7 +44,7 @@ res.send("Data posted")
 })
 
 // ! encrytingPassword and  validate the data Before storing into the database
-app.post("/usingValidatorsignup",async (req,res)=>{  
+app.post("/usingValidatorsignup1",async (req,res)=>{  
     //*  validate the data
 
     try{
@@ -55,6 +55,35 @@ app.post("/usingValidatorsignup",async (req,res)=>{
          console.log(passwordhash)
         const userdata=req.body;
         const user=new User(userdata)
+        await user.save();
+        res.send("Data posted")
+}
+
+ catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+}
+})
+
+//! encrypted password showed in badatabase
+app.post("/usingValidatorsignup2",async (req,res)=>{  
+    //*  validate the data
+
+    try{
+        validSignupData(req);
+         //* Encrypting the password
+         const {firstName,lastName,age,password,gender,email}=req.body;
+         
+         const passwordhash=await bcrypt.hash(password,10);
+         console.log(passwordhash)
+        
+        const user=new User({
+            firstName,
+            lastName,
+            age,
+            gender,
+            email,
+            password:passwordhash
+        })
         await user.save();
         res.send("Data posted")
 }
