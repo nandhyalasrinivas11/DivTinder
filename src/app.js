@@ -1,8 +1,8 @@
 const express = require("express");
+const app = express();
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
-
-const app = express();
+const {validSignupData}=require("./utils/validator");
 
 app.use(express.json());
 
@@ -27,17 +27,36 @@ catch(err){
 })
 
 //! Dynamic data adding (API)
+//! creating a API 
 app.post("/Dynamicsignup",async (req,res)=>{  
-    //! creating a API 
+    //*  validate the data
+
     try{
 const userdata=req.body;
 const user=new User(userdata)
 await user.save();
 res.send("Data posted")
 }
-  catch(err){
+  catch(err){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
      res.status(400).send("Fill the Details of the user");
   }
+})
+
+// ! encrytingPassword and  validate the data Before storing into the database
+app.post("/usingValidatorsignup",async (req,res)=>{  
+    //*  validate the data
+    
+    try{
+        validSignupData(req);
+        const userdata=req.body;
+        const user=new User(userdata)
+        await user.save();
+        res.send("Data posted")
+}
+
+ catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+}
 })
 
 //! fetching the data using name (API)
@@ -84,19 +103,26 @@ app.delete("/delete",async (req,res)=>{
 })
 
 //! updating the data (API)
-app.patch("/update",async (req,res)=>{
-    const firstName=req.body.firstName;
-    const data=req.body;
-    console.log(data);
-    try{
-        await User.findOneAndUpdate({firstName:firstName},data)
-        res.send("Data updated successfully");
-    }
-    catch(err){
-        res.status(404).send("Data Not updated")
+app.patch("/update", async (req, res) => {
+    const { firstName, ...data } = req.body;
 
+    try {
+        const user = await User.findOneAndUpdate(
+            { firstName },
+            { $set: data },
+            { new: true, runValidators: true }
+        );
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        res.send(user);
+    } catch (err) {
+        console.log(err); // Check the actual error
+        res.status(400).send("Data Not updated");
     }
-})
+});
 
 //! server
 const startServer = async () => {

@@ -1,5 +1,5 @@
 const mongoose= require("mongoose");
-
+const validator=require("validator");
 const userSchema= mongoose.Schema({
     firstName:{
       type:String,
@@ -10,14 +10,24 @@ const userSchema= mongoose.Schema({
     },
     email:{
         type:String,
-        required:true
+        required:true,
+        validator(value){
+         if(!validator.isEmail(value)){
+            throw new error("inavlid error");
+         }
+        }
     },
     age:{
        type:Number
     },
     gender:{
-        type:String
+        type:String,
+        validate(value){
+            if(!["male","female","others"].includes(value))
+                throw new Error("data invalid");
+        }
     }
-})
-
-module.exports=  mongoose.model("user",userSchema);
+},{timestamps:true})
+//! model object that allow you to  perform the database operations on a mongodb collection using the schema 
+const user =mongoose.model("user",userSchema)  
+module.exports= user;
