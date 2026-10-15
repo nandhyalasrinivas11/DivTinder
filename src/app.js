@@ -4,9 +4,10 @@ const { connectDB } = require("./config/database");
 const User = require("./models/user");
 const {validSignupData}=require("./utils/validator");
 const bcrypt=require("bcrypt")
+const cookieParser=require("cookie-parser")
 
-app.use(express.json());
-
+app.use(express.json()); //! express middleware 
+app.use(cookieParser())
 //! creating a API 
 //! static data adding (API)
 app.post("/userData",async (req,res)=>{
@@ -38,6 +39,8 @@ app.post("/login",async (req,res)=>{
     }
    const isPassword=await bcrypt.compare(password,user.password)
    if(isPassword){
+     // ! cookie
+    res.cookie("token","JWT cookie");
     res.send("user login successfuly");
    }
    else res.send("inValid password")
@@ -45,6 +48,14 @@ app.post("/login",async (req,res)=>{
    catch(err){
       res.send("ERROR"+err)
    }
+})
+
+//! validating the cookie
+app.get("/profile",(req,res)=>{
+ console.log("Profile route called!");
+ const cookies=req.cookies;
+console.log(cookies)
+res.send("reading the cookies")
 })
 
 //! Dynamic data adding (API)
