@@ -6,6 +6,7 @@ const {validSignupData}=require("./utils/validator");
 const bcrypt=require("bcrypt")
 const cookieParser=require("cookie-parser")
 const jwt=require("jsonwebtoken")
+const {userauth}=require("./middleware/auth")
 
 app.use(express.json()); //! express middleware 
 app.use(cookieParser())
@@ -56,7 +57,7 @@ app.post("/login",async (req,res)=>{
 })
 
 //! validating the cookie
-app.get("/profile",async (req,res)=>{
+app.get("/profile1", async (req,res)=>{
  console.log("Profile route called!");
 
  const cookies=req.cookies;
@@ -69,6 +70,19 @@ app.get("/profile",async (req,res)=>{
  const userdata=await User.findById({_id:_id})
 console.log(userdata)
 res.send(userdata)
+})
+
+//! implement the auth middleware in validation 
+app.get("/profile2", userauth,async (req,res)=>{
+ try{
+    const userdata=req.user
+   console.log(userdata)
+   res.send(userdata)
+ }
+ catch(err){
+    res.status(404).send("something wrong in the app.js")
+ }
+ 
 })
 
 //! Dynamic data adding (API)
@@ -215,4 +229,4 @@ const startServer = async () => {
     }
 };
 
-startServer();
+startServer()
