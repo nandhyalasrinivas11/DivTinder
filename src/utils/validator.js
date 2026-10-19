@@ -1,4 +1,4 @@
-const validator=require("validator");
+// const validator=require("validator");
 
 const validSignupData=(req)=>{
 
@@ -18,4 +18,10 @@ const validSignupData=(req)=>{
      }
 }
 
-module.exports={validSignupData};
+
+const validateData=(req)=>{
+const allowedModifyData=["firstName","lastName","age","gender"];
+const responsed=Object.keys(req.body).every((field)=>allowedModifyData.includes(field))
+return responsed; 
+}
+module.exports={validSignupData,validateData};
