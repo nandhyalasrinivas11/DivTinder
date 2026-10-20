@@ -8,14 +8,16 @@ const cookieParser=require("cookie-parser")
 const jwt=require("jsonwebtoken")
 const {userauth}=require("./middleware/auth")
 
-app.use(express.json()); //! express middleware 
+app.use(express.json());
 app.use(cookieParser())
 
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
+const requestRouter=require("./routes/requests");
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
+app.use("/",requestRouter);
 
 
 //! server

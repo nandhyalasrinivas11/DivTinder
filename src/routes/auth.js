@@ -20,16 +20,18 @@ authRouter.post("/login",async (req,res)=>{
         throw new Error("user not in Database");
     }
    const isPassword=await bcrypt.compare(password,user.password)
-   if(isPassword){
-    //* create a JWT Token
-      const token=await jwt.sign({_id:user._id},"srinivas123")
-      console.log(token)
-    //* Add token to the cookie and send response to the user 
-    res.cookie("token",token);
+
+    if(isPassword){
+     //* create a JWT Token
+     const token=await jwt.sign({_id:user._id},"srinivas123")
+     console.log(token)
+      //* Add token to the cookie and send response to the user 
+     res.cookie("token",token);
     res.send("user login successfuly");
    }
    else res.send("inValid password")
-   }
+}
+
    catch(err){
       res.send("ERROR"+err)
    }

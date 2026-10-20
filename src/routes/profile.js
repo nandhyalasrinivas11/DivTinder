@@ -28,11 +28,27 @@ profileRouter.post("/profile/edit",userauth ,(req,res)=>{
       
       const loggeduser=req.user;
       Object.keys(req.body).forEach((key)=>{loggeduser[key]=req.body[key]});
+       
       res.send("Data updated succesfully");
+      loggeduser.save()
       console.log(loggeduser);
+     
    }
    catch(err){
      res.status(404).send("ERROR"+err);
+   }
+})
+
+
+profileRouter.patch("/profile/forgotPassword",userauth,(req,res)=>{
+   try{
+      const loggeduser=req.user;
+      loggeduser.password=req.body.password;
+      loggeduser.save();
+      res.send("password updated successful");
+   }
+   catch(err){
+      res.status(404).send("ERROR : "+err);
    }
 })
 
